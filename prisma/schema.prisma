@@ -1,0 +1,164 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  User
+  Admin
+}
+
+enum AuthorStatus {
+  Pending
+  Active
+  Inactive
+}
+
+enum CategoryStatus {
+  Active
+  Inactive
+}
+
+enum PublicationStatus {
+  Pending
+  Active
+  Inactive
+  Suspended
+}
+
+enum AdmissionPreparationStatus {
+  Pending
+  Active
+  Inactive
+}
+
+enum BookStatus {
+  Published
+  Unpublished
+}
+
+enum OrderStatus {
+  Pending
+  Processing
+  Shipped
+  Delivered
+  Cancelled
+  Returned
+}
+
+enum PaymentMethod {
+  Bkash 
+  Cash
+}
+
+enum PaymentStatus {
+  Pending
+  Paid
+  Failed
+}
+
+enum Gender {
+  Male
+  Female
+  Other
+}
+
+enum Language {
+  Bangla
+  English
+  Arabic
+  Hindi
+  Urdu
+  French
+  German
+  Spanish
+  Portuguese
+  Italian
+  Dutch
+}
+
+model User {
+  id               String           @id @default(auto()) @map("_id") @db.ObjectId
+  name             String?
+  email            String           @unique
+  password         String?
+  emailVerified    DateTime?
+  image            String?
+  phone            String?
+  gender           Gender?
+  dob              DateTime?
+  accounts         Account[]
+  role             Role             @default(User)
+
+  pushSubscription PushSubscriber[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model PushSubscriber {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  endpoint  String
+  auth      String
+  p256dh    String
+  
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Donation {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  name String
+  phone String
+  email String?
+  comment String?
+  callSign String?
+  amount Float
+  paymentMethod PaymentMethod @default(Bkash)
+  paymentStatus PaymentStatus @default(Pending)
+
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
