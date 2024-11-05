@@ -39,7 +39,7 @@ export const CREATE_PAYMENT_FOR_DONATION = async ({ token, donationId, amount }:
         {
             mode: "0011",
             payerReference: " ",
-            callbackURL: `http://localhost:3000/api/payment/donation/verify?token=${token}&donationId=${donationId}`,
+            callbackURL: `https://s21arab.vercel.app/api/payment/donation/verify?token=${token}&donationId=${donationId}`,
             amount: amount,
             currency: "BDT",
             intent: "sale",
