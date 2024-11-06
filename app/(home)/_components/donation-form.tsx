@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { DonationSchema, DonationSchemaType } from "@/schema/donation.schema"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
@@ -13,10 +13,23 @@ import { Badge } from "@/components/ui/badge"
 import { LoadingButton } from "@/components/loading-button"
 import { useCreateDonationMutation } from "../mutation"
 import { cn } from "@/lib/utils"
+import { Checkbox } from "@/components/ui/checkbox"
+import { useState } from "react"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Label } from "@/components/ui/label"
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 
 export const DonationForm = () => {
+    const [hasCallSign, setHasCallSign] = useState<boolean>(false)
+    const [isCompany, setIsCompany] = useState<boolean>(false)
 
     const { mutate, isPending } = useCreateDonationMutation()
+
+
 
     const form = useForm<DonationSchemaType>({
         resolver: zodResolver(DonationSchema),
@@ -24,6 +37,7 @@ export const DonationForm = () => {
             name: "",
             amount: undefined,
             callSign: "",
+            companyName: "",
             phone: "",
             email: "",
             comment: "",
@@ -87,33 +101,74 @@ export const DonationForm = () => {
                             )}
                         />
 
-                        <FormField
-                            control={form.control}
-                            name="comment"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Comment</FormLabel>
-                                    <FormControl>
-                                        <Textarea placeholder="Enter your comment" {...field} disabled={isPending} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                        <div className="space-y-2">
+                            <Label>Do you have a call sign?</Label>
+                            <RadioGroup
+                                defaultValue="comfortable"
+                                className="flex items-center gap-x-3"
+                                onValueChange={(value) => setHasCallSign(value === "yes")}
+                            >
+                                <div className="flex items-center space-x-2">
+                                    <RadioGroupItem value="yes" id="r1" />
+                                    <Label htmlFor="r1">Yes</Label>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <RadioGroupItem value="no" id="r2" />
+                                    <Label htmlFor="r2">No</Label>
+                                </div>
+                            </RadioGroup>
+                            <Collapsible open={hasCallSign}>
+                                <CollapsibleContent>
+                                    <FormField
+                                        control={form.control}
+                                        name="callSign"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl>
+                                                    <Input placeholder="Enter your call sign" {...field} disabled={isPending} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </CollapsibleContent>
+                            </Collapsible>
+                        </div>
 
-                        <FormField
-                            control={form.control}
-                            name="callSign"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Call Sign</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Enter your call sign" {...field} disabled={isPending} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                        <div className="space-y-2">
+                            <Label>Donate as a company?</Label>
+                            <RadioGroup
+                                defaultValue="comfortable"
+                                className="flex items-center gap-x-3"
+                                onValueChange={(value) => setIsCompany(value === "yes")}
+                            >
+                                <div className="flex items-center space-x-2">
+                                    <RadioGroupItem value="yes" id="r1" />
+                                    <Label htmlFor="r1">Yes</Label>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <RadioGroupItem value="no" id="r2" />
+                                    <Label htmlFor="r2">No</Label>
+                                </div>
+                            </RadioGroup>
+                            <Collapsible open={isCompany}>
+                                <CollapsibleContent>
+                                    <FormField
+                                        control={form.control}
+                                        name="companyName"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl>
+                                                    <Input placeholder="Enter your company name" {...field} disabled={isPending} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </CollapsibleContent>
+                            </Collapsible>
+                        </div>
+
 
                         <FormField
                             control={form.control}
@@ -134,6 +189,20 @@ export const DonationForm = () => {
                                             </div>
                                             <Input placeholder="Enter your amount" {...field} type="number" onChange={(e) => field.onChange(parseInt(e.target.value))} />
                                         </div>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="comment"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Comment</FormLabel>
+                                    <FormControl>
+                                        <Textarea placeholder="Enter your comment" {...field} disabled={isPending} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

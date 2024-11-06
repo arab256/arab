@@ -24,6 +24,8 @@ export const DonationList = ({ donations }: DonationListProps) => {
                 <TableHead>Name</TableHead>
                 <TableHead>Phone</TableHead>
                 <TableHead>Email</TableHead>
+                <TableHead>Call Sign</TableHead>
+                <TableHead>Company Name</TableHead>
                 <TableHead>Amount</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Payment Method</TableHead>
@@ -36,6 +38,8 @@ export const DonationList = ({ donations }: DonationListProps) => {
                         <TableCell>{donation.name}</TableCell>
                         <TableCell>{donation.phone}</TableCell>
                         <TableCell>{donation.email}</TableCell>
+                        <TableCell>{donation?.callSign}</TableCell>
+                        <TableCell>{donation?.companyName}</TableCell>
                         <TableCell>{donation.amount}</TableCell>
                         <TableCell>{format(donation.createdAt, "dd MMMM yyyy")}</TableCell>
                         <TableCell>{donation.paymentMethod}</TableCell>
@@ -43,23 +47,14 @@ export const DonationList = ({ donations }: DonationListProps) => {
                             <Badge>{donation.paymentStatus}</Badge>
                         </TableCell>
                         <TableCell>
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" className="h-8 w-8 p-0">
-                                        <span className="sr-only">Open menu</span>
-                                        <EllipsisVertical className="h-4 w-4" />
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                    <DropdownMenuItem
-                                        className="w-flex items-center gap-x-3"
-                                        onClick={() => onOpen(donation.id)}
-                                    >
-                                        <Trash2 className="h-4 w-4 text-rose-500" />
-                                        Delete
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
+                            <Button
+                                className="w-flex items-center gap-x-3"
+                                onClick={() => onOpen(donation.id)}
+                                variant="destructive"
+                                size="icon"
+                            >
+                                <Trash2 className="h-4 w-4" />
+                            </Button>
                         </TableCell>
                     </TableRow>
                 ))}

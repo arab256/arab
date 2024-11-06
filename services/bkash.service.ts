@@ -38,7 +38,7 @@ export const CREATE_PAYMENT_FOR_DONATION = async ({ token, donationId, amount }:
         process.env.NEXT_PUBLIC_PGW_BKASH_CREATE_PAYMENT_URL!,
         {
             mode: "0011",
-            payerReference: " ",
+            payerReference: "Donation",
             callbackURL: `https://s21arab.vercel.app/api/payment/donation/verify?token=${token}&donationId=${donationId}`,
             amount: amount,
             currency: "BDT",

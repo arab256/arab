@@ -24,7 +24,7 @@ const Payment = async ({ params }: Props) => {
             <Card>
                 <CardHeader>
                     <CardTitle>Payment</CardTitle>
-                    <CardDescription>Please pay the amount to the following bank account</CardDescription>
+                    <CardDescription>Please pay the amount through BKash</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <p className="text-lg font-bold">Your donation amount is <span className="text-green-600 text-2xl">{donation.amount}</span> BDT</p>

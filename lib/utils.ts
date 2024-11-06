@@ -16,3 +16,13 @@ export function saltAndHashPassword(password: any) {
 export const savingsPercentage = (price: number, discountPrice: number) => {
   return Math.round(((price - discountPrice) / price) * 100);
 };
+
+
+export const formatBDTCurrency = (amount: number): string => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'BDT',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount);
+};

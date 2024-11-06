@@ -6,6 +6,7 @@ import { DonationList } from './_components/donation-list'
 import { Header } from './_components/header'
 import { PaymentStatus } from '@prisma/client'
 import { CustomPagination } from '@/components/custom-pagination'
+import { ExportButton } from './_components/export-button'
 
 interface Props {
     searchParams: {
@@ -56,6 +57,7 @@ const Donations = async ({ searchParams }: Props) => {
                 </CardHeader>
                 <CardContent>
                     <Header />
+                    <ExportButton donations={donations} />
                     <DonationList donations={donations} />
                     <CustomPagination totalPages={totalPages} />
                 </CardContent>

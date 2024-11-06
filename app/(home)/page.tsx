@@ -3,8 +3,28 @@ import { Header } from './_components/header'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import Image from 'next/image'
+import { DonationCard } from './_components/donation-card'
+import { db } from '@/lib/prisma'
+import { PaymentStatus } from '@prisma/client'
 
-const App = () => {
+const App = async () => {
+    const [donations, totalDonations] = await Promise.all([
+        db.donation.aggregate({
+            where: {
+                paymentStatus: PaymentStatus.Paid
+            },
+            _sum: {
+                amount: true
+            }
+        }),
+        db.donation.count({
+            where: {
+                paymentStatus: PaymentStatus.Paid
+            }
+        })
+    ])
+
+    console.log(donations, totalDonations)
     return (
         <div className="w-full max-w-screen-xl mx-auto px-4 space-y-10">
             <Header />
@@ -16,9 +36,7 @@ const App = () => {
             <Button variant="outline" asChild className="flex mx-auto max-w-fit py-6 px-10">
                 <Link href="https://safetywingsbd.com/arab" target="_blank">Register Now</Link>
             </Button>
-            <Button variant="default" asChild className="flex mx-auto max-w-fit py-6 px-10">
-                <Link href="/donation">Donate Now</Link>
-            </Button>
+            <DonationCard donations={donations._sum.amount} totalDonations={totalDonations} />
 
             <div className='flex flex-col items-center gap-y-4'>
                 <h1 className='text-xl underline tracking-widest'>About Our Programme</h1>

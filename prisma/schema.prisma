@@ -151,9 +151,10 @@ model Donation {
 
   name String
   phone String
-  email String?
+  email String
   comment String?
   callSign String?
+  companyName String?
   amount Float
   paymentMethod PaymentMethod @default(Bkash)
   paymentStatus PaymentStatus @default(Pending)

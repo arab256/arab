@@ -36,6 +36,6 @@ export const PaymentForm = ({ donationId, amount }: Props) => {
 
 
     return <div>
-        <Button onClick={() => generateToken({ donationId, amount })}>Pay with BKash</Button>
+        <Button className="w-full" onClick={() => generateToken({ donationId, amount })}>Pay with BKash</Button>
     </div>
 }
